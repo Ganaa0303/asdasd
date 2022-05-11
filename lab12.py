@@ -25,30 +25,40 @@ class LogicGate:
         self.name = gate_name
         self.__xdata = xdata.reshape(4,2)
         self.__tdata = tdata.reshape(4,1)
-        self.__W = np.random.rand(2,1)
-        self.__b = np.random.rand(1)
+        self.__W2 = np.random.rand(2,6)
+        self.__b2 = np.random.rand(6)
+        self.__W3 = np.random.rand(6,1)
+        self.__b3 = np.random.rand(1)
         self.__learning_rate = 1e-2
-    def __loss_func(self):
+
+    def loss_val(self):
         delta = 1e-7
-        z = np.dot(self.__xdata,self.__W)+self.__b
-        y = sigmoid(z)
+        z2 = np.dot(self.__xdata,self.__W2)+self.__b2
+        a2 = sigmoid(z2)
+        z3 = np.dot(a2,self.W__3)+self.__b3
+        y = a3 = sigmoid(z3)
         return -np.sum((self.__tdata*np.log(y+delta)+(1-self.__tdata)*np.log(1-y+delta)) )
+    
     def error_val(self):
         delta = 1e-7
         z = np.dot(self.__xdata,self.__W)+self.__b
         y = sigmoid(z)
         return -np.sum((self.__tdata*np.log(y+delta)+(1-self.__tdata)*np.log(1-y+delta)) )
     def train(self): 
-        f= lambda x:self.__loss_func()
-        for step in range(8001):
-            self.__W -= self.__learning_rate*numerical_derivative(f,self.__W)
-            self.__b -= self.__learning_rate*numerical_derivative(f,self.__b)
+        f= lambda x:self.feed_forward()
+        for step in range(10001):
+            self.__W2 -= self.__learning_rate*numerical_derivative(f,self.__W2)
+            self.__b2 -= self.__learning_rate*numerical_derivative(f,self.__b2)
+            self.__W3 -= self.__learning_rate*numerical_derivative(f,self.__W3)
+            self.__b3 -= self.__learning_rate*numerical_derivative(f,self.__b3)
         if(step%400 == 0):
-            print("step=",step,"error value=",self.error_val())
+            print("step=",step,"loss value=",self.loss_val())
     def predict(self,input_data):
 
-        z = np.dot(input_data,self.__W)+self.__b
-        y = sigmoid(z)
+        z2 = np.dot(input_data,self.__W2)+self.__b2
+        a2 = sigmoid(z2)
+        z3 = np.dot(a2,self.__W3)+self.__b3
+        y = a3 = sigmoid(z3)
         if(y>0.5):
             result = 1
         else:
@@ -61,56 +71,56 @@ AND_obj = LogicGate("AND_GATE",xdata,tdata)
 AND_obj.train()
 print(AND_obj.name,"n")
 test_data = np.array([[0,0],[0,1],[1,0],[1,1]])
-for input_data in test_data:
-    (sigmoid.val,logical_val) = AND_obj.predict(input_data)
-    print(input_data , "=" , logical_val,"\n")
+for data in test_data:
+    
+    print(AND_obj.predict(data))
 
 
-xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-tdata = np.array([0, 1, 1, 1])
-OR_obj = LogicGate("OR_GATE", xdata, tdata)
-OR_obj.train()
-print(OR_obj.name, "\n")
-test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-for input_data in test_data:
-    (sigmoid.val, logical_val) = OR_obj.predict(input_data)
-    print(input_data, " = ", logical_val, "\n")
+# xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# tdata = np.array([0, 1, 1, 1])
+# OR_obj = LogicGate("OR_GATE", xdata, tdata)
+# OR_obj.train()
+# print(OR_obj.name, "\n")
+# test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# for input_data in test_data:
+#     (sigmoid.val, logical_val) = OR_obj.predict(input_data)
+#     print(input_data, " = ", logical_val, "\n")
 
-xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-tdata = np.array([1, 1, 1, 0])
-NAND_obj = LogicGate("NAND_GATE", xdata, tdata)
-NAND_obj.train()
-print(NAND_obj.name, "\n")
-test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-for input_data in test_data:
-    (sigmoid.val, logical_val) = NAND_obj.predict(input_data)
-    print(input_data, " = ", logical_val, "\n")
+# xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# tdata = np.array([1, 1, 1, 0])
+# NAND_obj = LogicGate("NAND_GATE", xdata, tdata)
+# NAND_obj.train()
+# print(NAND_obj.name, "\n")
+# test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# for input_data in test_data:
+#     (sigmoid.val, logical_val) = NAND_obj.predict(input_data)
+#     print(input_data, " = ", logical_val, "\n")
 
 
-xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-tdata = np.array([0, 1, 1, 0])
-XOR_obj = LogicGate("XOR_GATE", xdata, tdata)
-XOR_obj.train()
-print(XOR_obj.name, "\n")
-test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
-for input_data in test_data:
-    (sigmoid.val, logical_val) = XOR_obj.predict(input_data)
-    print(input_data, " = ", logical_val, "\n")
+# xdata = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# tdata = np.array([0, 1, 1, 0])
+# XOR_obj = LogicGate("XOR_GATE", xdata, tdata)
+# XOR_obj.train()
+# print(XOR_obj.name, "\n")
+# test_data = np.array([ [0,0], [0,1], [1,0], [1,1] ])
+# for input_data in test_data:
+#     (sigmoid.val, logical_val) = XOR_obj.predict(input_data)
+#     print(input_data, " = ", logical_val, "\n")
 
-input_data = np.array([[0,0],[0,1],[1,0],[1,1]])
-s1 = []
-s2 = []
-new_input_data = []
-final_output = []
-for index in range (len(input_data)):
-        s1 = NAND_obj.predict(input_data[index])
-        s2 = OR_obj.predict(input_data[index])
+# input_data = np.array([[0,0],[0,1],[1,0],[1,1]])
+# s1 = []
+# s2 = []
+# new_input_data = []
+# final_output = []
+# for index in range (len(input_data)):
+#         s1 = NAND_obj.predict(input_data[index])
+#         s2 = OR_obj.predict(input_data[index])
 
-        new_input_data.append(s1[-1])
-        new_input_data.append(s2[-1])
-        (sigmoid.val, logical_val) = AND_obj.predict(np.array(new_input_data))
-        final_output.append(logical_val)
-        new_input_data = []
-for index in range(len(input_data)):
-        print(input_data[index], " = ", final_output[index], end='')
-        print("\n")
+#         new_input_data.append(s1[-1])
+#         new_input_data.append(s2[-1])
+#         (sigmoid.val, logical_val) = AND_obj.predict(np.array(new_input_data))
+#         final_output.append(logical_val)
+#         new_input_data = []
+# for index in range(len(input_data)):
+#         print(input_data[index], " = ", final_output[index], end='')
+#         print("\n")
